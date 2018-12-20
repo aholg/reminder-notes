@@ -1,0 +1,7 @@
+# SBT files
+target/
+.lib/
+
+# IntelliJ IDEA files
+\.idea
+*.iml
