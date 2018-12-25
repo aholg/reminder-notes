@@ -3,13 +3,13 @@ package com.aholg.web
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server._
-import com.aholg.web.NoteController.{ErrorResponse, NoteViewModel}
-import com.aholg.web.service.{Note, NoteService}
+import com.aholg.web.NoteController.{ErrorResponse, JsonSupport, NoteViewModel}
+import com.aholg.web.repository.{Note, NoteRepository}
 import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 import scala.util.{Failure, Success}
 
-case class NoteController(noteService: NoteService) extends Directives with JsonSupport {
+case class NoteController(noteService: NoteRepository) extends Directives with JsonSupport {
   lazy val routes = {
     (path("notes") & pathEndOrSingleSlash) {
       get {
@@ -28,10 +28,10 @@ object NoteController {
 
   case class ErrorResponse(description: String)
 
-}
+  trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
+    implicit val noteFormat: RootJsonFormat[Note] = jsonFormat2(Note.apply)
+    implicit val noteViewModelFormat: RootJsonFormat[NoteViewModel] = jsonFormat1(NoteViewModel)
+    implicit val errorResponseFormat: RootJsonFormat[ErrorResponse] = jsonFormat1(ErrorResponse)
+  }
 
-trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val noteFormat: RootJsonFormat[Note] = jsonFormat2(Note)
-  implicit val noteViewModelFormat: RootJsonFormat[NoteViewModel] = jsonFormat1(NoteViewModel)
-  implicit val errorResponseFormat: RootJsonFormat[ErrorResponse] = jsonFormat1(ErrorResponse)
 }
