@@ -8,6 +8,22 @@ class NoteRepositoryImpl(connectionPoolName: Symbol)(implicit ec: ExecutionConte
 
   import Notes._
 
+  override def addNote(title: String, content: String) = {
+    val column = Notes.column
+
+    Future {
+      NamedDB(connectionPoolName) localTx { implicit session =>
+        withSQL {
+          insertInto(Notes).namedValues(
+            column.title -> title,
+            column.content -> content
+          )
+        }.update().apply()
+      }
+    }
+  }
+
+
   override def getNotes(id: String): Future[Seq[Note]] = {
     Future {
       NamedDB(connectionPoolName) readOnly { implicit session =>

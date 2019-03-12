@@ -33,5 +33,7 @@ class NoteControllerTest extends FunSuite with Matchers with ScalatestRouteTest 
 
   class NoteRepositoryStub(result: Future[Seq[Note]]) extends NoteRepository {
     override def getNotes(id: String): Future[Seq[Note]] = result
+
+    override def addNote(title: String, content: String): Future[Unit] = ???
   }
 }
