@@ -22,10 +22,10 @@ class NoteRepositoryImplTest extends FunSuite with Matchers with ScalaFutures wi
 
   override protected def afterEach(): Unit = {
     val column = Notes.column
+
     NamedDB(connectionPoolName).localTx { implicit session =>
-      withSQL(
-        delete.from(Notes)
-      ).update().apply()
+      withSQL(delete.from(Notes)).update().apply()
+      withSQL(delete.from(Users)).update().apply()
     }
   }
 
@@ -46,25 +46,39 @@ class NoteRepositoryImplTest extends FunSuite with Matchers with ScalaFutures wi
   test("should be able to add and return a note") {
     val title = "WOLOOLOOO"
     val content = "WOOLOOOOOOOOOOOOOOLLOOOO"
+    val userName = "wolololo"
 
-    Await.ready(noteRepository.addNote(title, content), 1.seconds)
+    Await.ready(noteRepository.addUser(userName), 1.seconds)
+    Await.ready(noteRepository.addNote(title, content, userName), 1.seconds)
 
-    whenReady(noteRepository.getNotes("someId")) { result =>
-      result shouldBe Seq(Note(title, content))
+    whenReady(noteRepository.getNotes(userName)) { result =>
+      result shouldBe Seq(Note(title, content, userName))
     }
   }
 
   test("should be able to add and return several notes") {
     val title = "WOLOOLOOO"
     val content = "WOOLOOOOOOOOOOOOOOLLOOOO"
+    val userName = "wolololo"
 
-    noteRepository.addNote(title, content)
-    Await.ready(noteRepository.addNote(title, content), 1.seconds)
+    Await.ready(noteRepository.addUser(userName), 1.seconds)
+    noteRepository.addNote(title, content, userName)
+    Await.ready(noteRepository.addNote(title, content, userName), 1.seconds)
 
-    val note = Note(title, content)
+    val note = Note(title, content, userName)
 
-    whenReady(noteRepository.getNotes("someId")) { result =>
+    whenReady(noteRepository.getNotes(userName)) { result =>
       result shouldBe Seq(note, note)
+    }
+  }
+
+  test("should be able to add and return a user") {
+    val userName = "wolololo"
+
+    Await.ready(noteRepository.addUser(userName), 1.seconds)
+
+    whenReady(noteRepository.getUser(userName)) { result =>
+      result shouldBe Some(User(userName))
     }
   }
 }

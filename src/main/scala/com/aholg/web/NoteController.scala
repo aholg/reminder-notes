@@ -29,7 +29,7 @@ object NoteController {
   case class ErrorResponse(description: String)
 
   trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-    implicit val noteFormat: RootJsonFormat[Note] = jsonFormat2(Note.apply)
+    implicit val noteFormat: RootJsonFormat[Note] = jsonFormat3(Note.apply)
     implicit val noteViewModelFormat: RootJsonFormat[NoteViewModel] = jsonFormat1(NoteViewModel)
     implicit val errorResponseFormat: RootJsonFormat[ErrorResponse] = jsonFormat1(ErrorResponse)
   }

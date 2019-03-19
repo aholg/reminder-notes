@@ -5,7 +5,7 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import com.aholg.web.NoteController.{ErrorResponse, JsonSupport, NoteViewModel}
-import com.aholg.web.repository.{Note, NoteRepository}
+import com.aholg.web.repository.{Note, NoteRepository, User}
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.Future
@@ -13,11 +13,11 @@ import scala.concurrent.Future
 class NoteControllerTest extends FunSuite with Matchers with ScalatestRouteTest with SprayJsonSupport with JsonSupport {
 
   test("should return a note view model") {
-    val controller = new NoteController(new NoteRepositoryStub(Future.successful(Seq(Note("WOLOLOOO", "WOLOOOLLOOOLLOOOOOOOOOOOOOOO")))))
+    val controller = new NoteController(new NoteRepositoryStub(Future.successful(Seq(Note("WOLOLOOO", "WOLOOOLLOOOLLOOOOOOOOOOOOOOO", "wololool")))))
 
     Get("/notes?id=123") ~> Route.seal(controller.routes) ~> check {
       status shouldBe StatusCodes.OK
-      responseAs[NoteViewModel] shouldBe NoteViewModel(Seq(Note("WOLOLOOO", "WOLOOOLLOOOLLOOOOOOOOOOOOOOO")))
+      responseAs[NoteViewModel] shouldBe NoteViewModel(Seq(Note("WOLOLOOO", "WOLOOOLLOOOLLOOOOOOOOOOOOOOO", "wololool")))
     }
   }
 
@@ -34,6 +34,10 @@ class NoteControllerTest extends FunSuite with Matchers with ScalatestRouteTest 
   class NoteRepositoryStub(result: Future[Seq[Note]]) extends NoteRepository {
     override def getNotes(id: String): Future[Seq[Note]] = result
 
-    override def addNote(title: String, content: String): Future[Unit] = ???
+    override def addNote(title: String, content: String, userName: String): Future[Unit] = ???
+
+    override def addUser(username: String): Future[Unit] = ???
+
+    override def getUser(username: String): Future[Option[User]] = ???
   }
 }
