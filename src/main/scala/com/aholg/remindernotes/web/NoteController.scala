@@ -1,11 +1,11 @@
-package com.aholg.web
+package com.aholg.remindernotes.web
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.headers.LinkParams.title
 import akka.http.scaladsl.server._
-import com.aholg.web.NoteController.{ErrorResponse, JsonSupport, NoteViewModel}
-import com.aholg.web.repository.{Note, NoteRepository}
+import com.aholg.remindernotes.web.NoteController.{ErrorResponse, JsonSupport, NoteViewModel}
+import com.aholg.remindernotes.repository.{Note, NoteRepository}
 import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 import scala.util.{Failure, Success}

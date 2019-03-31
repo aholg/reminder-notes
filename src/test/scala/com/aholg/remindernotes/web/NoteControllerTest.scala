@@ -1,4 +1,4 @@
-package com.aholg.web
+package com.aholg.remindernotes.web
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.marshalling.PredefinedToEntityMarshallers._
@@ -7,8 +7,8 @@ import akka.http.scaladsl.model.Multipart.FormData.BodyPart.Strict
 import akka.http.scaladsl.model.{Multipart, StatusCodes}
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import com.aholg.web.NoteController.{ErrorResponse, JsonSupport, NoteViewModel}
-import com.aholg.web.repository.{Note, NoteRepository, User}
+import com.aholg.remindernotes.web.NoteController.{ErrorResponse, JsonSupport, NoteViewModel}
+import com.aholg.remindernotes.repository.{Note, NoteRepository, User}
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.Future

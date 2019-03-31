@@ -1,4 +1,4 @@
-package com.aholg.web.repository
+package com.aholg.remindernotes.repository
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatest.concurrent.ScalaFutures

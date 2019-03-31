@@ -1,4 +1,4 @@
-package com.aholg.web.repository
+package com.aholg.remindernotes.repository
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
