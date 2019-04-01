@@ -4,16 +4,17 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.marshalling.PredefinedToEntityMarshallers._
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.http.scaladsl.model.Multipart.FormData.BodyPart.Strict
-import akka.http.scaladsl.model.{Multipart, StatusCodes}
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import com.aholg.remindernotes.web.NoteController.{ErrorResponse, JsonSupport, NoteViewModel}
-import com.aholg.remindernotes.repository.{Note, NoteRepository, User}
+import com.aholg.remindernotes.repository.{Note, NoteRepository}
+import com.aholg.remindernotes.web.Common.{CommonProtocols, ErrorResponse}
+import com.aholg.remindernotes.web.NoteController.{NoteProtocols, NoteViewModel}
 import org.scalatest.{FunSuite, Matchers}
 
 import scala.concurrent.Future
 
-class NoteControllerTest extends FunSuite with Matchers with ScalatestRouteTest with SprayJsonSupport with JsonSupport {
+class NoteControllerTest extends FunSuite with Matchers with ScalatestRouteTest with SprayJsonSupport with NoteProtocols with CommonProtocols{
 
   test("should return a note view model for a user") {
     val noteRepositoryStub = new NoteRepositoryTestFixture {
@@ -26,7 +27,7 @@ class NoteControllerTest extends FunSuite with Matchers with ScalatestRouteTest 
       status shouldBe StatusCodes.OK
       responseAs[NoteViewModel] shouldBe NoteViewModel(Seq(Note("WOLOLOOO", "WOLOOOLLOOOLLOOOOOOOOOOOOOOO", "wololool")))
     }
-  }
+  } 
 
   test("should return 500 error if notes could not be retrieved") {
     val noteRepositoryStub = new NoteRepositoryTestFixture {
@@ -76,10 +77,6 @@ class NoteControllerTest extends FunSuite with Matchers with ScalatestRouteTest 
     override def getNotes(id: String): Future[Seq[Note]] = ???
 
     override def addNote(title: String, content: String, userName: String): Future[Unit] = ???
-
-    override def addUser(username: String): Future[Unit] = ???
-
-    override def getUser(username: String): Future[Option[User]] = ???
   }
 
 }

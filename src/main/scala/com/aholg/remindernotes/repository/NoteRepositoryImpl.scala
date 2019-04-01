@@ -4,7 +4,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
 import scalikejdbc._
 
-class NoteRepositoryImpl(connectionPoolName: Symbol)(implicit ec: ExecutionContext) extends NoteRepository {
+class NoteRepositoryImpl(connectionPoolName: Symbol)(implicit ec: ExecutionContext) extends NoteRepository with UserRepository {
 
   import Notes._
   import Users._

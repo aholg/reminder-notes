@@ -2,16 +2,15 @@ package com.aholg.remindernotes.web
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.model.headers.LinkParams.title
 import akka.http.scaladsl.server._
-import com.aholg.remindernotes.web.NoteController.{ErrorResponse, JsonSupport, NoteViewModel}
 import com.aholg.remindernotes.repository.{Note, NoteRepository}
+import com.aholg.remindernotes.web.Common.{CommonProtocols, ErrorResponse}
+import com.aholg.remindernotes.web.NoteController.{NoteProtocols, NoteViewModel}
 import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 import scala.util.{Failure, Success}
 
-case class NoteController(noteService: NoteRepository) extends Directives with JsonSupport {
-
+case class NoteController(noteService: NoteRepository) extends Directives with NoteProtocols with CommonProtocols {
 
   lazy val routes = {
     concat(notesViewRoute, saveNoteRoute)
@@ -44,12 +43,9 @@ object NoteController {
 
   case class NoteViewModel(notes: Seq[Note])
 
-  case class ErrorResponse(description: String)
-
-  trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
+  trait NoteProtocols extends SprayJsonSupport with DefaultJsonProtocol {
     implicit val noteFormat: RootJsonFormat[Note] = jsonFormat3(Note.apply)
     implicit val noteViewModelFormat: RootJsonFormat[NoteViewModel] = jsonFormat1(NoteViewModel)
-    implicit val errorResponseFormat: RootJsonFormat[ErrorResponse] = jsonFormat1(ErrorResponse)
   }
 
 }
