@@ -1,0 +1,20 @@
+version: '3'
+services:
+  app:
+    image: adoptopenjdk/openjdk8
+    build: .
+    links:
+      - postgres:postgres.local
+    ports:
+      - "80:80"
+  postgres:
+      image: postgres:10.5-alpine
+      volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+      container_name: "reminder_notes_postgres"
+      ports:
+        - "54320:5432"
+      environment:
+        POSTGRES_USER: mr_cod_the_fish
+        POSTGRES_PASSWORD: hello!
+        POSTGRES_DB: cod
